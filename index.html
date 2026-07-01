@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #202124;
+            --surface-color: #292a2d;
+            --surface-hover: #35363a;
+            --text-main: #e8eaed;
+            --text-muted: #9aa0a6;
+            --accent-color: #4ade80;
+            --border-color: #3c4043;
+            --border-radius: 8px;
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Header Styles --- */
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .header-left .date-time {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .header-left h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .weather {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            color: var(--accent-color);
+            text-align: right;
+        }
+        
+        .weather .details {
+            display: flex;
+            flex-direction: column;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 10px;
+        }
+
+        /* --- Section Titles --- */
+        h2.section-title {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        /* --- Applications Grid --- */
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 3rem;
+        }
+
+        .app-card {
+            background-color: var(--bg-color);
+            border: 1px solid transparent;
+            border-radius: var(--border-radius);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: var(--transition);
+        }
+
+        .app-card:hover {
+            background-color: var(--surface-color);
+            border-color: var(--border-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .app-icon {
+            background-color: var(--surface-hover);
+            color: var(--accent-color);
+            width: 40px;
+            height: 40px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .app-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .app-sub {
+            font-size: 0.75rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+        }
+
+        /* --- Bookmarks Grid --- */
+        .bookmarks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .bookmark-category h3 {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bookmark-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bookmark-list a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: inline-block;
+        }
+
+        .bookmark-list a:hover {
+            color: var(--accent-color);
+            transform: translateX(4px);
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .weather {
+                align-self: flex-start;
+            }
+            .applications-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-left">
+            <div class="date-time" id="datetime-display">LOADING DATE & TIME...</div>
+            <h1>Good morning!</h1>
+        </div>
+        <div class="weather">
+            <i class="fa-solid fa-sun fa-spin-pulse"></i>
+            <div class="details">
+                <span>73°F</span>
+                <span>0%</span>
+            </div>
+        </div>
+    </header>
+
+    <section>
+        <h2 class="section-title">Applications</h2>
+        <div class="applications-grid">
+            <a href="YOUR_AUDIOBOOKSHELF_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-headphones"></i></div>
+                <div class="app-info">
+                    <span class="app-name">AUDIOBOOKSHELF</span>
+                    <span class="app-sub">Audiobookshelf</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_BRAVE_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-brands fa-brave"></i></div>
+                <div class="app-info">
+                    <span class="app-name">BRAVE</span>
+                    <span class="app-sub">Brave Browser</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_BTOP_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-terminal"></i></div>
+                <div class="app-info">
+                    <span class="app-name">BTOP</span>
+                    <span class="app-sub">Btop</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_CALIBRE_LOCAL_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-book"></i></div>
+                <div class="app-info">
+                    <span class="app-name">CALIBRE-WEB</span>
+                    <span class="app-sub">CasaOS (Local)</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_CALIBRE_WORK_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-book-open"></i></div>
+                <div class="app-info">
+                    <span class="app-name">CALIBRE@WORK</span>
+                    <span class="app-sub">Calibre-Web</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_CASAOS_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-server"></i></div>
+                <div class="app-info">
+                    <span class="app-name">CASAOS</span>
+                    <span class="app-sub">CasaOS</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_FRESHRSS_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-rss"></i></div>
+                <div class="app-info">
+                    <span class="app-name">FRESHRSS</span>
+                    <span class="app-sub">FreshRSS</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_LIBREOFFICE_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-file-word"></i></div>
+                <div class="app-info">
+                    <span class="app-name">LIBREOFFICE</span>
+                    <span class="app-sub">Libre Office</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_MYSPEED_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                <div class="app-info">
+                    <span class="app-name">MY SPEED</span>
+                    <span class="app-sub">Speed Test</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_NAVIDROME_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-music"></i></div>
+                <div class="app-info">
+                    <span class="app-name">NAVIDROME</span>
+                    <span class="app-sub">Navidrome</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_PAPERLESS_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                <div class="app-info">
+                    <span class="app-name">PAPERLESS-NGX</span>
+                    <span class="app-sub">Paperless NGX</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_SANDDROP_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-share-nodes"></i></div>
+                <div class="app-info">
+                    <span class="app-name">SANDDROP</span>
+                    <span class="app-sub">Senddrop</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_STIRLINGPDF_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                <div class="app-info">
+                    <span class="app-name">STIRLING PDF</span>
+                    <span class="app-sub">PDF Everything</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_SYNOLOGY_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-hard-drive"></i></div>
+                <div class="app-info">
+                    <span class="app-name">SYNOLOGY</span>
+                    <span class="app-sub">Synology NAS</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_TANDOOR_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-utensils"></i></div>
+                <div class="app-info">
+                    <span class="app-name">TANDOOR</span>
+                    <span class="app-sub">Tandoor</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_TRILLIUM_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                <div class="app-info">
+                    <span class="app-name">TRILLIUM</span>
+                    <span class="app-sub">Trillium</span>
+                </div>
+            </a>
+            
+            <a href="YOUR_WALLABAG_URL" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-bookmark"></i></div>
+                <div class="app-info">
+                    <span class="app-name">WALLABAG</span>
+                    <span class="app-sub">Wallabag</span>
+                </div>
+            </a>
+            
+            <a href="http://10.86.1.90" target="_blank" class="app-card">
+                <div class="app-icon"><i class="fa-solid fa-network-wired"></i></div>
+                <div class="app-info">
+                    <span class="app-name">WD DRIVE (LOCAL)</span>
+                    <span class="app-sub">10.86.1.90</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">Bookmarks</h2>
+        <div class="bookmarks-grid">
+            
+            <div class="bookmark-category">
+                <h3><i class="fa-solid fa-robot"></i> AI</h3>
+                <ul class="bookmark-list">
+                    <li><a href="https://www.canva.com/" target="_blank">Canva</a></li>
+                    <li><a href="https://chat.openai.com/" target="_blank">ChatGPT</a></li>
+                    <li><a href="https://claude.ai/" target="_blank">Claude</a></li>
+                    <li><a href="https://gemini.google.com/" target="_blank">Gemini</a></li>
+                    <li><a href="https://grok.x.ai/" target="_blank">Grok</a></li>
+                    <li><a href="https://www.meta.ai/" target="_blank">Meta</a></li>
+                    <li><a href="https://copilot.microsoft.com/" target="_blank">Microsoft Copilot</a></li>
+                    <li><a href="https://www.perplexity.ai/" target="_blank">Perplexity</a></li>
+                </ul>
+            </div>
+
+            <div class="bookmark-category">
+                <h3><i class="fa-solid fa-gamepad"></i> I AM BORED</h3>
+                <ul class="bookmark-list">
+                    <li><a href="YOUR_URL_HERE" target="_blank">Bored Button</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Card games</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Cloud Hiker</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Conspiracy Theories</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Neal</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">The Useless Website</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Weboasis Arcade</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">What came first</a></li>
+                </ul>
+            </div>
+
+            <div class="bookmark-category">
+                <h3><i class="fa-solid fa-folder-tree"></i> MY DIRECTORIES & TOOLS</h3>
+                <ul class="bookmark-list">
+                    <li><a href="YOUR_URL_HERE" target="_blank">!Polaris</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">5000 Best Websites</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">FHMY</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Megathread</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Ocean of PDF</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">OFBOB Playlists</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Real-Debrid</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Sejda PDF AIO</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">SoftArchive</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">The Anarchist Library</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">WebOasis</a></li>
+                </ul>
+            </div>
+
+            <div class="bookmark-category">
+                <h3><i class="fa-regular fa-newspaper"></i> MY NEWS</h3>
+                <ul class="bookmark-list">
+                    <li><a href="YOUR_URL_HERE" target="_blank">Alltop</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">BBC Urdu</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Brutalist</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">DeepNews</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Google News</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Lite News Sites</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Minimalist News</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Newsnow</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Readspike</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Skimfeed</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Start.me</a></li>
+                </ul>
+            </div>
+
+            <div class="bookmark-category">
+                <h3><i class="fa-solid fa-tv"></i> MY WATCH</h3>
+                <ul class="bookmark-list">
+                    <li><a href="YOUR_URL_HERE" target="_blank">1-dot</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Desi Telly Box</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">FM Stream</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Haystack</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">IPTV.org</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Photo Call</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Plex</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">SOMAFM</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Stream M4u</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Stremio @Web</a></li>
+                </ul>
+            </div>
+
+            <div class="bookmark-category">
+                <h3><i class="fa-solid fa-cart-shopping"></i> SHOPPING & DEALS</h3>
+                <ul class="bookmark-list">
+                    <li><a href="YOUR_URL_HERE" target="_blank">Bens Bargains</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Brad's Deal</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Clark Deals</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Dealigg</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Dealnews</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Gottadeal</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Groupon</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Newegg</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">RetailMeNot</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Slickdeals</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">The Freebie Guy</a></li>
+                    <li><a href="YOUR_URL_HERE" target="_blank">Woot</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        
+        let dateString = now.toLocaleDateString('en-GB', options).toUpperCase();
+        let timeString = now.toLocaleTimeString('en-US', { hour12: false });
+        
+        document.getElementById('datetime-display').innerText = `${dateString} - ${timeString}`;
+        
+        // Greeting logic based on time
+        const hour = now.getHours();
+        let greeting = "Good morning!";
+        if (hour >= 12 && hour < 17) greeting = "Good afternoon!";
+        else if (hour >= 17) greeting = "Good evening!";
+        
+        document.querySelector('.header-left h1').innerText = greeting;
+    }
+    
+    // Update immediately, then every second
+    updateTime();
+    setInterval(updateTime, 1000);
+</script>
+
+</body>
+</html>
